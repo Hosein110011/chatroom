@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Room, Topic, Message
-from .forms import RoomForm
+from .forms import RoomForm, UpdateUserForm
 from django.db.models import Q
 from django.contrib.auth. models import User
 from django.contrib import messages
@@ -89,8 +89,12 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 
-def userProfile(request):
-    context = {}
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    room_messages = user.message_set.all()
+    topics = Topic.objects.all()
+    context = {'user':user, 'rooms':rooms, 'room_messages':room_messages, 'topics':topics}
     return render(request, 'base/profile.html', context)
 
 
@@ -100,7 +104,9 @@ def createRoom(request):
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
-            form.save()
+            room = form.save(commit=False)
+            room.host = request.user
+            room.save()
             return redirect('home')
     context = {'form':form}
     return render(request, 'base/room_form.html', context)
@@ -145,3 +151,16 @@ def deleteMessage(request, pk):
         return redirect('home')
     return render(request, 'base/delete.html', {'obj':message})
 
+
+@login_required(login_url='login')
+def updateUser(request):
+    user = request.user
+    form = UpdateUserForm(instance=user)
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id) 
+    
+    context = {'form':form}
+    return render(request, 'base/update_user.html', context)

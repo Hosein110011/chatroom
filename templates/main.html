@@ -1,11 +1,11 @@
-
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/main.css' %}">
     
     <title>ChatRoom</title>
   </head>
@@ -19,6 +19,9 @@
         {% endfor %}
     </ul>
     {% endif %}
+
+    {% comment %} <img src="{% static 'images/download.jpg' %}"> {% endcomment %}
+
     {% block content %}
 
     {% endblock %}
