@@ -37,10 +37,12 @@ def createRoom(request):
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
-    if form.is_valid():
-        form.save(commit=True)
-        return redirect('home')
-    
+    if request.method == 'POST':
+        form = RoomForm(request.POST, instance=room)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('home')
+        
     context = {'form':form}
     return render(request, 'base/room_form.html', context)
 
