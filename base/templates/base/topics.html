@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+<div>
+    <form method='GET' action="{% url 'topics' %}">
+        <input type='text' name='q' placeholder="search topic..."/><input type="submit" value="Search" />
+    </form>
+</div>
+
+
+
+<div>
+<ul class="topics__list">
+    <li>
+        <a href="{% url 'topics' %}" class="active">All <span>{{topics.count}}</span>
+    </li>
+{% for topic in topics %}
+    <li>
+        <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}} <span>{{topic.room_set.all.count}}</span></a>
+    </li>
+{% endfor %}
+</ul>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
