@@ -5,7 +5,7 @@
     Hello {{request.user.username}}
 </p>
 <form method="GET" action="{% url 'home' %}">
-    <input type="text" name="q" placeholder="Search Room..." />
+    <input type="text" name="q" placeholder="Search Room..." /><input type="submit" value="Search" />
 
 </form>
 
@@ -15,4 +15,5 @@
 {% else %}
 <a href="{% url 'login' %}">Login</a>
 {% endif %}
+<a href="{% url 'home' %}">Home</a>
 <hr>
